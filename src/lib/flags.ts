@@ -38,10 +38,10 @@ export function getDistinctId(): string {
     return (client as { get_distinct_id: () => string }).get_distinct_id();
   }
   
-  // Fallback: generate a temporary ID
+  // Fallback: generate a persistent ID
   let distinctId = globalThis.localStorage?.getItem('posthog_distinct_id');
   if (!distinctId) {
-    distinctId = `temp_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+    distinctId = `user_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
     globalThis.localStorage?.setItem('posthog_distinct_id', distinctId);
   }
   return distinctId;

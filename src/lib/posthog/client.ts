@@ -29,6 +29,9 @@ export function captureEvent(eventName: string, properties?: Record<string, unkn
       build_sha: process.env.NEXT_PUBLIC_BUILD_SHA,
       env: process.env.NEXT_PUBLIC_APP_ENV,
       page_path: globalThis.location?.pathname,
+      session_id: client.get_session_id(),
+      user_agent: globalThis.navigator?.userAgent,
+      timestamp: new Date().toISOString(),
     });
   }
 }

@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { StepButton } from '@/components/step-button';
 import { captureEvent } from '@/lib/posthog/client';
 import { getClientFeatureFlag, FEATURE_FLAGS, getDistinctId } from '@/lib/flags';
-import { advanceStep } from '@/app/actions';
+import { advanceStep, trackFunnelAbandonment } from '@/app/actions';
 
 export default function StepPage() {
   const params = useParams();
@@ -19,12 +19,40 @@ export default function StepPage() {
       // Capture step viewed event
       captureEvent('step_viewed', {
         step_index: stepIndex,
+        step_name: `step_${stepIndex}`,
+        funnel_position: stepIndex,
+        total_steps: 7,
         variant_brighter_red: isBrighterRed,
         feature_flag: FEATURE_FLAGS.EXP_BRIGHTER_RED_STEP2,
+        user_id: getDistinctId(),
       });
       
       setIsInitialized(true);
     }
+  }, [stepIndex]);
+
+  // Track when user leaves the page (funnel abandonment)
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const distinctId = getDistinctId();
+      // Track abandonment when user leaves the page
+      trackFunnelAbandonment(stepIndex, distinctId, 'page_leave');
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        const distinctId = getDistinctId();
+        trackFunnelAbandonment(stepIndex, distinctId, 'tab_switch');
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [stepIndex]);
 
   const handleNext = async () => {

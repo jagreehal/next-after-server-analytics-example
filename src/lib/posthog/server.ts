@@ -1,4 +1,5 @@
 import { PostHog } from 'posthog-node';
+import { ENVIRONMENT_PREFIX } from '../flags';
 
 let posthog: PostHog | undefined;
 
@@ -26,7 +27,7 @@ export async function captureServerEvent(
       ...properties,
       app_version: process.env.APP_VERSION,
       build_sha: process.env.BUILD_SHA,
-      env: process.env.APP_ENV,
+      env: ENVIRONMENT_PREFIX,
       server_ts: new Date().toISOString(),
     },
   });

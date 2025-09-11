@@ -23,6 +23,9 @@ export async function advanceStep(stepIndex: number, distinctId: string) {
       // Capture server-side acknowledgment
       await captureServerEvent(distinctId, 'step_next_server_ack', {
         step_index: stepIndex,
+        step_name: `step_${stepIndex}`,
+        funnel_position: stepIndex,
+        total_steps: 7,
       });
 
       // If this is the final step, capture flow completion
@@ -30,6 +33,7 @@ export async function advanceStep(stepIndex: number, distinctId: string) {
         await captureServerEvent(distinctId, 'flow_completed', {
           total_duration_ms: Date.now(), // This would be calculated from start time
           steps: 7,
+          completion_rate: 100,
         });
       }
 
@@ -45,4 +49,26 @@ export async function advanceStep(stepIndex: number, distinctId: string) {
   } else {
     redirect('/finish');
   }
+}
+
+export async function trackFunnelAbandonment(stepIndex: number, distinctId: string, reason?: string) {
+  'use server';
+  
+  after(async () => {
+    try {
+      await captureServerEvent(distinctId, 'funnel_abandoned', {
+        step_index: stepIndex,
+        step_name: `step_${stepIndex}`,
+        funnel_position: stepIndex,
+        total_steps: 7,
+        completion_rate: (stepIndex / 7) * 100,
+        abandonment_reason: reason || 'unknown',
+        timestamp: new Date().toISOString(),
+      });
+
+      await shutdownPostHog();
+    } catch (error) {
+      console.error('Error tracking funnel abandonment:', error);
+    }
+  });
 }
