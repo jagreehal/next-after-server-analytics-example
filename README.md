@@ -50,22 +50,33 @@ bun install
 
 ### 3. Set Up PostHog Feature Flags
 
-In your PostHog project, create these feature flags:
+In your PostHog project, create these feature flags with environment-specific prefixes:
 
-#### `exp_brighter_red_step2`
+#### Environment-Specific Naming
+The app automatically prefixes feature flags based on the environment:
+- **Development**: `DEV_exp_brighter_red_step2`
+- **Production**: `PRODUCTION_exp_brighter_red_step2`
+- **Test**: `TEST_exp_brighter_red_step2`
+- **Local/Other**: `LOCAL_exp_brighter_red_step2`
+
+#### Feature Flags to Create
+
+**`{ENV_PREFIX}exp_brighter_red_step2`**
 - **Type**: Boolean
 - **Rollout**: 50% (for A/B testing)
 - **Description**: Makes Step 2 button brighter red
 
-#### `fx_confetti_finish`
+**`{ENV_PREFIX}fx_confetti_finish`**
 - **Type**: Boolean
 - **Rollout**: 100% (or as desired)
 - **Description**: Shows confetti on flow completion
 
-#### `start_alt_page`
+**`{ENV_PREFIX}start_alt_page`**
 - **Type**: Boolean
 - **Rollout**: 0% (or as desired)
 - **Description**: Shows alternative start page
+
+> **Note**: Replace `{ENV_PREFIX}` with your environment prefix (DEV_, PRODUCTION_, TEST_, or LOCAL_)
 
 ### 4. Run the Application
 

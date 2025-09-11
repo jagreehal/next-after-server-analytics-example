@@ -1,8 +1,21 @@
-export const FEATURE_FLAGS = {
-  EXP_BRIGHTER_RED_STEP2: 'exp_brighter_red_step2',
-  FX_CONFETTI_FINISH: 'fx_confetti_finish',
-  START_ALT_PAGE: 'start_alt_page',
+// Get environment prefix for feature flags
+
+const ENV_MAP = {
+  production: 'PRODUCTION',
+  development: 'DEV',
+  test: 'TEST',
+  local: 'LOCAL',
 } as const;
+
+export const ENVIRONMENT_PREFIX = ENV_MAP[process.env.NODE_ENV] || 'LOCAL';
+
+export const FEATURE_FLAGS = {
+  EXP_BRIGHTER_RED_STEP2: `${ENVIRONMENT_PREFIX}_EXP_BRIGHTER_RED_STEP2`,
+  FX_CONFETTI_FINISH: `${ENVIRONMENT_PREFIX}_FX_CONFETTI_FINISH`,
+  START_ALT_PAGE: `${ENVIRONMENT_PREFIX}_START_ALT_PAGE`,
+} as const;
+
+// Export the environment prefix for debugging/logging purposes
 
 export type FeatureFlagKey = typeof FEATURE_FLAGS[keyof typeof FEATURE_FLAGS];
 

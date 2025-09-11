@@ -2,11 +2,11 @@ import { PostHog } from 'posthog-node';
 
 let posthog: PostHog | undefined;
 
-export function getPostHogClient() {
+export function getPostHogServer() {
   if (!posthog) {
     posthog = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
       host: process.env.NEXT_PUBLIC_POSTHOG_HOST as string,
-      flushAt: 1, 
+      flushAt: 1,
       flushInterval: 0,
     });
   }
@@ -18,7 +18,7 @@ export async function captureServerEvent(
   eventName: string,
   properties?: Record<string, unknown>
 ) {
-  const client = getPostHogClient();
+  const client = getPostHogServer();
   await client.capture({
     distinctId,
     event: eventName,
@@ -36,7 +36,7 @@ export async function getFeatureFlag(
   distinctId: string,
   flagKey: string
 ): Promise<boolean | string | undefined> {
-  const client = getPostHogClient();
+  const client = getPostHogServer();
   return await client.getFeatureFlag(flagKey, distinctId);
 }
 
