@@ -14,26 +14,20 @@ export function Navigation(): React.ReactElement {
         <div className="flex h-14 items-center">
           <div className="mr-4 flex">
             <Link href="/" className="mr-6 flex items-center space-x-2">
-              <span className="font-bold">Next.js Template</span>
+              <span className="font-bold">PostHog Kitchen Sink</span>
             </Link>
             <nav className="flex items-center space-x-6 text-sm font-medium">
               <Link
-                href="/examples/server-action"
+                href="/steps/1"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                Server Action
+                Start Flow
               </Link>
               <Link
-                href="/api/hello"
+                href="/finish"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                API Route
-              </Link>
-              <Link
-                href="/examples/data-fetching"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Data Fetching
+                Finish Page
               </Link>
             </nav>
           </div>

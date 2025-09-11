@@ -1,58 +1,64 @@
-import { trackEvent } from './actions';
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { captureEvent } from '@/lib/posthog/client';
+import { getClientFeatureFlag, FEATURE_FLAGS } from '@/lib/flags';
 
 export default function Home(): React.ReactElement {
-  async function handleSubmit(formData: FormData) {
-    'use server';
+  const [isInitialized, setIsInitialized] = useState(false);
+  const isAltPage = getClientFeatureFlag(FEATURE_FLAGS.START_ALT_PAGE) === true;
 
-    const email = formData.get('email') as string;
-    console.log('Form submitted with email:', email);
+  useEffect(() => {
+    // Capture start variant viewed event
+    captureEvent('start_variant_viewed', {
+      variant: isAltPage ? 'alt' : 'default',
+      feature_flag: FEATURE_FLAGS.START_ALT_PAGE,
+    });
+    setIsInitialized(true);
+  }, [isAltPage]);
 
-    await trackEvent('form_submitted', email || 'anonymous_user');
-
-    redirect('/success');
+  if (!isInitialized) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-10rem)]">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900">Loading...</h1>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
       <div className="max-w-3xl mx-auto text-center">
-        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-          Server Analytics Example
-        </h1>
-        <p className="mt-4 text-xl text-muted-foreground">
-          A demonstration of Next.js 15 next/after for server-side analytics
-        </p>
-
-        <div className="mt-8 max-w-md mx-auto">
-          <form action={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-left mb-1"
+        {isAltPage ? (
+          // Alternative start page
+          <>
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+              🌈 Rainbow Journey Awaits
+            </h1>
+            <div className="mt-8">
+              <Link
+                href="/steps/1"
+                className="inline-block px-8 py-4 bg-gradient-to-r from-red-500 via-orange-500 to-emerald-500 text-white text-xl font-semibold rounded-2xl hover:scale-105 transition-transform"
               >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your email"
-                required
-                className="w-full px-4 py-2 border rounded-md"
-              />
+                Begin Rainbow Journey
+              </Link>
             </div>
-            <button
-              type="submit"
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              Submit
-            </button>
-          </form>
-          <p className="mt-4 text-sm text-muted-foreground">
-            When you submit this form, analytics will be tracked on the server
-            side after the response is sent to the client.
-          </p>
-        </div>
+          </>
+        ) : (
+          // Default start page
+          <>
+            <div className="mt-8">
+              <Link
+                href="/steps/1"
+                className="inline-block px-8 py-4 bg-blue-600 text-white text-xl font-semibold rounded-2xl hover:bg-blue-700 transition-colors"
+              >
+                Start 7-Step Rainbow Flow
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

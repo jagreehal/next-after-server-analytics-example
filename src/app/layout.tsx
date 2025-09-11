@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Next.js Template',
-  description: 'Modern Next.js template with examples of common features',
-  keywords: ['Next.js', 'React', 'TypeScript', 'Template'],
+  title: 'PostHog Kitchen Sink',
+  description: 'A comprehensive Next.js app demonstrating PostHog analytics, feature flags, and server actions',
+  keywords: ['Next.js', 'PostHog', 'Analytics', 'Feature Flags', 'Server Actions'],
 };
 
 export default function RootLayout({
@@ -39,24 +39,24 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-screen flex-col">
-            <Navigation />
-            <main className="flex-1">
-              <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                {children}
-              </div>
-            </main>
-            <footer className="border-t">
-              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex h-14 items-center justify-between">
-                  <p className="text-sm text-muted-foreground">
-                    Built with Next.js App Router
-                  </p>
+            <div className="relative flex min-h-screen flex-col">
+              <Navigation />
+              <main className="flex-1">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                  {children}
                 </div>
-              </div>
-            </footer>
-          </div>
-          <Toaster />
+              </main>
+              <footer className="border-t">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex h-14 items-center justify-between">
+                    <p className="text-sm text-muted-foreground">
+                      PostHog Kitchen Sink - Built with Next.js App Router
+                    </p>
+                  </div>
+                </div>
+              </footer>
+            </div>
+            <Toaster />
         </ThemeProvider>
       </body>
     </html>
