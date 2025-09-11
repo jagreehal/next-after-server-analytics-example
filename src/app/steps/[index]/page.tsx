@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { StepButton } from '@/components/step-button';
-import { captureEvent } from '@/lib/posthog/client';
+import { captureEvent, capturePageView } from '@/lib/posthog/client';
 import { getClientFeatureFlag, FEATURE_FLAGS, getDistinctId } from '@/lib/flags';
 import { advanceStep, trackFunnelAbandonment } from '@/app/actions';
 
@@ -15,8 +15,20 @@ export default function StepPage() {
   useEffect(() => {
     if (stepIndex >= 1 && stepIndex <= 7) {
       const isBrighterRed = getClientFeatureFlag(FEATURE_FLAGS.EXP_BRIGHTER_RED_STEP2) === true;
+      const distinctId = getDistinctId();
       
-      // Capture step viewed event
+      // Capture page view for this specific step
+      capturePageView(`/steps/${stepIndex}`, {
+        step_index: stepIndex,
+        step_name: `step_${stepIndex}`,
+        funnel_position: stepIndex,
+        total_steps: 7,
+        variant_brighter_red: isBrighterRed,
+        feature_flag: FEATURE_FLAGS.EXP_BRIGHTER_RED_STEP2,
+        user_id: distinctId,
+      });
+      
+      // Also capture step viewed event for additional tracking
       captureEvent('step_viewed', {
         step_index: stepIndex,
         step_name: `step_${stepIndex}`,
@@ -24,7 +36,7 @@ export default function StepPage() {
         total_steps: 7,
         variant_brighter_red: isBrighterRed,
         feature_flag: FEATURE_FLAGS.EXP_BRIGHTER_RED_STEP2,
-        user_id: getDistinctId(),
+        user_id: distinctId,
       });
       
       setIsInitialized(true);
