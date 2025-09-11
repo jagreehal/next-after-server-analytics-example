@@ -2,12 +2,12 @@
 
 const ENV_MAP = {
   production: 'PRODUCTION',
-  development: 'DEV',
+  development: 'DEVELOPMENT',
   test: 'TEST',
   local: 'LOCAL',
 } as const;
 
-export const ENVIRONMENT_PREFIX = ENV_MAP[process.env.NODE_ENV] || 'LOCAL';
+export const ENVIRONMENT_PREFIX = ENV_MAP[process.env.NEXT_PUBLIC_NODE_ENV as keyof typeof ENV_MAP] || 'LOCAL';
 
 export const FEATURE_FLAGS = {
   EXP_BRIGHTER_RED_STEP2: `${ENVIRONMENT_PREFIX}_EXP_BRIGHTER_RED_STEP2`,
