@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Confetti } from '@/components/confetti';
-import { capturePageView } from '@/lib/posthog/client';
-import { getClientFeatureFlag, FEATURE_FLAGS, getDistinctId } from '@/lib/flags';
+import { usePostHogCapture } from '@/lib/posthog/hooks';
+import { getClientFeatureFlag, FEATURE_FLAGS } from '@/lib/flags';
 
 export default function FinishPage() {
   const [showConfetti, setShowConfetti] = useState(false);
+  const { capturePageView } = usePostHogCapture();
 
   useEffect(() => {
     // Capture page view for finish page
@@ -15,7 +16,6 @@ export default function FinishPage() {
       step_name: 'finish',
       funnel_position: 8,
       total_steps: 7,
-      user_id: getDistinctId(),
     });
     
     // Trigger confetti after a short delay
@@ -24,7 +24,7 @@ export default function FinishPage() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [capturePageView]);
 
   const shouldShowConfetti = getClientFeatureFlag(FEATURE_FLAGS.FX_CONFETTI_FINISH) === true;
 

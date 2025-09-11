@@ -2,19 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { captureEvent, capturePageView } from '@/lib/posthog/client';
-import { getClientFeatureFlag, FEATURE_FLAGS, getDistinctId } from '@/lib/flags';
+import { usePostHogCapture } from '@/lib/posthog/hooks';
+import { getClientFeatureFlag, FEATURE_FLAGS } from '@/lib/flags';
 
 export default function Home(): React.ReactElement {
   const [isInitialized, setIsInitialized] = useState(false);
   const isAltPage = getClientFeatureFlag(FEATURE_FLAGS.START_ALT_PAGE) === true;
+  const { captureEvent, capturePageView } = usePostHogCapture();
 
   useEffect(() => {
-    const distinctId = getDistinctId();
-    
     // Capture page view for home page
     capturePageView('/', {
-      user_id: distinctId,
       variant: isAltPage ? 'alt' : 'default',
       feature_flag: FEATURE_FLAGS.START_ALT_PAGE,
     });
@@ -25,7 +23,7 @@ export default function Home(): React.ReactElement {
       feature_flag: FEATURE_FLAGS.START_ALT_PAGE,
     });
     setIsInitialized(true);
-  }, [isAltPage]);
+  }, [isAltPage, captureEvent, capturePageView]);
 
   if (!isInitialized) {
     return (

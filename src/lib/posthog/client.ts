@@ -1,23 +1,10 @@
-import { PostHog } from 'posthog-js';
-
-let posthog: PostHog | undefined;
-
-export function getPostHogClient(): PostHog | undefined {
+export function getPostHogClient() {
   if (typeof globalThis === 'undefined') {
-    return undefined;
+    return null;
   }
-
-  if (!posthog) {
-    posthog = new PostHog();
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com',
-      person_profiles: 'identified_only',
-      capture_pageview: false, // We'll handle this manually
-      capture_pageleave: true,
-    });
-  }
-
-  return posthog;
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (globalThis as any).posthog;
 }
 
 export function captureEvent(eventName: string, properties?: Record<string, unknown>) {
