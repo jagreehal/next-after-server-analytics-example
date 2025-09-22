@@ -1,11 +1,9 @@
 // instrumentation.js
 export function register() {
-  // No-op for initialization
 }
 
 export const onRequestError = async (err, request) => {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { getPostHogServer } = require('./lib/posthog/server');
     const posthog = await getPostHogServer();
     let distinctId = null;

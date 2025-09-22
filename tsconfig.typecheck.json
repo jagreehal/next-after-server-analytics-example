@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": [
+    "src/app/**/*.ts",
+    "src/app/**/*.tsx",
+    "src/lib/**/*.ts",
+    "src/lib/**/*.tsx",
+    "src/components/confetti.tsx",
+    "src/components/error.tsx",
+    "src/components/global-error.tsx",
+    "src/components/navigation.tsx",
+    "src/components/posthog-provider.tsx",
+    "src/components/step-button.tsx",
+    "src/components/theme-provider.tsx",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "vitest.config.mts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/components/ui/**",
+    ".next/**",
+    "out/**",
+    "build/**"
+  ]
+}
