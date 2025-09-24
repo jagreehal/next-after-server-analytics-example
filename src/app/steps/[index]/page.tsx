@@ -66,18 +66,10 @@ export default function StepPage() {
   }, [stepIndex]);
 
   const handleNext = async () => {
-    try {
-      const distinctId = getDistinctId();
-      await advanceStep(stepIndex, distinctId);
-    } catch (error) {
-      // Next.js redirects throw a special error that should be re-thrown
-      // to allow the redirect to proceed normally
-      if (error && typeof error === 'object' && 'digest' in error) {
-        throw error;
-      }
-      // Log other errors but don't block the redirect
-      console.error('Error in handleNext:', error);
-    }
+    const distinctId = getDistinctId();
+    // No need to wrap in try-catch since redirect throws intentionally
+    // The redirect error will be handled by Next.js internally
+    await advanceStep(stepIndex, distinctId);
   };
 
   if (!isInitialized || stepIndex < 1 || stepIndex > 7) {

@@ -17,7 +17,7 @@ export async function trackEvent(eventName: string, userId: string) {
 
 export async function advanceStep(stepIndex: number, distinctId: string) {
   'use server';
-  
+
   after(async () => {
     try {
       // Capture server-side acknowledgment
@@ -39,11 +39,12 @@ export async function advanceStep(stepIndex: number, distinctId: string) {
 
       await shutdownPostHog();
     } catch (error) {
-      console.error('Error in advanceStep:', error);
+      console.error('Error in advanceStep after hook:', error);
     }
   });
 
   // Navigate to next step or finish
+  // Note: redirect() throws internally, but this is expected behavior in Next.js
   if (stepIndex < 7) {
     redirect(`/steps/${stepIndex + 1}`);
   } else {
