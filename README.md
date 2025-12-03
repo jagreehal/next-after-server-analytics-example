@@ -1,6 +1,6 @@
 # PostHog Kitchen Sink - Next.js Analytics Demo
 
-A comprehensive Next.js application demonstrating PostHog analytics, feature flags, and server actions with a beautiful rainbow-themed 4-step flow.
+A comprehensive Next.js application demonstrating PostHog analytics, feature flags, and server actions with a beautiful rainbow-themed 7-step flow.
 
 ## Features
 
@@ -191,6 +191,11 @@ Create a funnel with these steps:
 ## Contributing
 
 This is a demonstration project. Feel free to fork and modify for your own PostHog testing needs!
+
+## Claude Code 
+
+```bash
+claude --dangerously-skip-permissions --strict-mcp-config  .mcp.json
 
 ## License
 

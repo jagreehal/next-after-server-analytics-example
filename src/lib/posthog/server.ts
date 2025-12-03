@@ -1,3 +1,11 @@
+/**
+ * @deprecated This file is deprecated. Use autotel instead.
+ * See src/lib/autotel/server.ts for the new implementation.
+ * 
+ * This file is kept for backward compatibility but should not be used in new code.
+ * All server-side PostHog tracking should use autotel via src/lib/autotel/server.ts
+ */
+
 import { PostHog } from 'posthog-node';
 import { ENVIRONMENT_PREFIX } from '../flags';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { captureEvent } from '@/lib/posthog/client';
+import { trackEvent } from '@/lib/autotel/client';
 import { getClientFeatureFlag, FEATURE_FLAGS } from '@/lib/flags';
 
 interface StepButtonProps {
@@ -20,8 +20,8 @@ export function StepButton({ stepIndex, onNext, className = '' }: StepButtonProp
     setIsLoading(true);
 
     try {
-      // Capture client-side event
-      captureEvent('step_next_clicked', {
+      // Track client-side event using autotel
+      trackEvent('step_next_clicked', {
         step_index: stepIndex,
         step_duration_ms: duration,
         route: globalThis.location?.pathname,
